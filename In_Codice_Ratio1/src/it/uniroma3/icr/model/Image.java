@@ -1,21 +1,13 @@
 package it.uniroma3.icr.model;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import org.apache.commons.io.FilenameUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import javax.imageio.ImageIO;
+import java.util.*;
 import javax.persistence.*;
 
 @Entity
 public class Image {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private Integer x; 
 	private Integer y;
@@ -26,20 +18,23 @@ public class Image {
 	private String row;
 	private String word;
 	private String path;
-	
+	@OneToMany(mappedBy = "image")
+	private List<Result> results;
+	@ManyToMany(mappedBy = "images")
+	private List<Job> jobs;
 
 	public Image(){}
 
 	public Image(String manuscript,String page, String row, String word, Integer x, Integer y, Integer width, Integer height, String path){
-		this.manuscript=manuscript;
-		this.page=page;
-		this.row=row;
-		this.word=word;
-		this.x=x;
-		this.y=y;
-		this.height=height;
-		this.width=width;
-		this.path=path;
+		this.manuscript = manuscript;
+		this.page = page;
+		this.row = row;
+		this.word = word;
+		this.x = x;
+		this.y = y;
+		this.height = height;
+		this.width = width;
+		this.path = path;
 	}
 
 	public Long getId() {
@@ -122,6 +117,22 @@ public class Image {
 		this.path = path;
 	}
 	
+	public List<Result> getResults() {
+		return results;
+	}
+
+	public void setResults(List<Result> results) {
+		this.results = results;
+	}
+
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
+
 	@Override
 	public String toString(){
 		return "manoscritto= "+this.manuscript+" Pagina=" +this.getPage()+" Riga=" +this.getRow()+" Parola= "+this.getWord()+" x="+this.getX();
